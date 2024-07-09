@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../domain/entity/user_entity.dart';
 import '../../../domain/repositories/user/user_repsitory.dart';
 import '../../services/user/user_service.dart';
@@ -12,7 +14,12 @@ class UserRepsitoryImp implements UserRepsitory {
   }
 
   @override
-  Future<UserEntity> getUserFromDb(String uid) async{
+  Future<UserEntity> getUserFromDb(String uid) async {
     return UserEntity.fromModel(await userService.getUserFromDb(uid));
+  }
+
+  @override
+  Future<void> uploadProfilePicture(String userId, File file) {
+    return userService.uploadProfilePicture(userId, file);
   }
 }

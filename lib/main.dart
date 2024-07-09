@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +32,7 @@ void main() async {
       appId: '1:944177542429:android:d846b23b3cc9de2dde1df4',
       messagingSenderId: '',
       projectId: 'instagram-1dda6',
-      storageBucket: '',
+      storageBucket: 'gs://instagram-1dda6.appspot.com',
     ),
   );
   runApp(const MyApp());
@@ -40,6 +41,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 AuthRepositoryImp(RepositoryProvider.of<AuthService>(context))),
         RepositoryProvider<UserService>(
-            create: (context) => UserServiceImp(firestore)),
+            create: (context) => UserServiceImp(firestore, firebaseStorage)),
         RepositoryProvider<UserRepsitory>(
             create: (context) =>
                 UserRepsitoryImp(RepositoryProvider.of<UserService>(context))),

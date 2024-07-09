@@ -40,18 +40,21 @@ class _ProfilePageState extends State<ProfilePage> {
         return BlocBuilder<UserBloc, UserState>(
           builder: (usercontext, userstate) {
             return BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
+              builder: (context, authstate) {
                 return Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
-                    title: Text(userstate.userEntity?.username ?? 'undefined'),
+                    title:
+                        Text(userstate.userEntity?.username ?? 'undefined'),
                     actions: [
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.add)),
                       IconButton(
                           onPressed: () {}, icon: const Icon(Icons.menu)),
                     ],
                   ),
                   body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -60,16 +63,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             radius: 50,
                             backgroundColor: Colors.white,
                           ),
-                          const IntOnStringWidget(integer: 6, mstr: 'posts'),
+                          const IntOnStringWidget(
+                              integer: 6, mstr: 'posts'),
                           IntOnStringWidget(
-                              integer:
-                                  userstate.userEntity?.followerList?.length ??
-                                      0,
+                              integer: userstate
+                                      .userEntity?.followerList?.length ??
+                                  0,
                               mstr: 'Followers'),
                           IntOnStringWidget(
-                              integer:
-                                  userstate.userEntity?.followingList?.length ??
-                                      0,
+                              integer: userstate
+                                      .userEntity?.followingList?.length ??
+                                  0,
                               mstr: 'Followwing'),
                         ],
                       ),
@@ -81,108 +85,197 @@ class _ProfilePageState extends State<ProfilePage> {
                         userstate.userEntity?.bio ?? ' no bio',
                         style: const TextStyle(color: Colors.white),
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return SizedBox(
-                                height: MediaQuery.of(context).size.height - 50,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      AppBar(
-                                        title: const Text('Edit profile'),
-                                        leading: IconButton(
-                                          icon: const Icon(Icons.close),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                        actions: [
-                                          IconButton(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height -
+                                            50,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          AppBar(
+                                            title:
+                                                const Text('Edit profile'),
+                                            leading: IconButton(
+                                              icon: const Icon(Icons.close),
                                               onPressed: () {
-                                                context
-                                                    .read<UserBloc>()
-                                                    .add(UpdateUserDataEvent(
-                                                        userEntity: UserEntity(
-                                                      username:
-                                                          userNameController
-                                                              .text,
-                                                      name: nameController.text,
-                                                      bio: bioController.text,
-                                                      uid: state.userCredential
-                                                          ?.user?.uid,
-                                                      email: state
-                                                          .userCredential
-                                                          ?.user
-                                                          ?.email,
-                                                    )));
                                                 Navigator.pop(context);
                                               },
-                                              icon: const Icon(
-                                                Icons.done,
-                                                color: Colors.blue,
-                                              ))
+                                            ),
+                                            actions: [
+                                              IconButton(
+                                                  onPressed: () {
+                                                    final media = context
+                                                        .read<MediaBloc>()
+                                                        .state
+                                                        .fileImage;
+                                                    context.read<UserBloc>().add(
+                                                        UploadProfilePhotoEvent(
+                                                            uid: authstate
+                                                                    .userCredential
+                                                                    ?.user
+                                                                    ?.uid ??
+                                                                '',
+                                                            file: media!
+                                                                .file));
+                                                    context
+                                                        .read<UserBloc>()
+                                                        .add(
+                                                            UpdateUserDataEvent(
+                                                                userEntity:
+                                                                    UserEntity(
+                                                          username:
+                                                              userNameController
+                                                                  .text,
+                                                          name:
+                                                              nameController
+                                                                  .text,
+                                                          bio: bioController
+                                                              .text,
+                                                          uid: authstate
+                                                              .userCredential
+                                                              ?.user
+                                                              ?.uid,
+                                                          email: authstate
+                                                              .userCredential
+                                                              ?.user
+                                                              ?.email,
+                                                        )));
+                                                    Navigator.pop(context);
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.done,
+                                                    color: Colors.blue,
+                                                  ))
+                                            ],
+                                          ),
+                                          const CircleAvatar(
+                                            radius: 50,
+                                          ),
+                                          SizedBox(
+                                            height: Gaps.smallest,
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                showModalBottomSheet(
+                                                  backgroundColor:
+                                                      Colors.white,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return SizedBox(
+                                                      height: 100,
+                                                      width: MediaQuery.of(
+                                                              context)
+                                                          .size
+                                                          .width,
+                                                      child:
+                                                          Column(children: [
+                                                        ElevatedButton(
+                                                            onPressed: () {
+                                                              context
+                                                                  .read<
+                                                                      MediaBloc>()
+                                                                  .add(
+                                                                      UploadPictureFromGalleryEvent());
+                                                            },
+                                                            child:
+                                                                const Text(
+                                                              'Upload from Gallery',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            )),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            context
+                                                                .read<
+                                                                    MediaBloc>()
+                                                                .add(
+                                                                    UploadPictureFromCameraEvent());
+                                                          },
+                                                          child: const Text(
+                                                            'Upload from Cammera',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                      ]),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: const Text(
+                                                'Edit picture or avatar',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              )),
+                                          SizedBox(
+                                            height: Gaps.medium,
+                                          ),
+                                          TextFieldWidget(
+                                            controller: nameController,
+                                            hintText: 'Name',
+                                          ),
+                                          TextFieldWidget(
+                                            controller: userNameController,
+                                            hintText: 'Username',
+                                          ),
+                                          TextFieldWidget(
+                                            controller: bioController,
+                                            hintText: 'Bio',
+                                          ),
+                                          const Text('Add link'),
+                                          TextButton(
+                                              onPressed: () {},
+                                              child: const Text(
+                                                  'Switch to professional account ',
+                                                  style: TextStyle(
+                                                      color: Colors.blue))),
+                                          TextButton(
+                                              onPressed: () {},
+                                              child: const Text(
+                                                'Personal information settings',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              )),
                                         ],
                                       ),
-                                      const CircleAvatar(
-                                        radius: 50,
-                                      ),
-                                      SizedBox(
-                                        height: Gaps.smallest,
-                                      ),
-                                      TextButton(
-                                          onPressed: () {
-                                            context.read<MediaBloc>().add(
-                                                UploadPictureFromGalleryEvent());
-                                          },
-                                          child: const Text(
-                                            'Edit picture or avatar',
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          )),
-                                      SizedBox(
-                                        height: Gaps.medium,
-                                      ),
-                                      TextFieldWidget(
-                                        controller: nameController,
-                                        hintText: 'Name',
-                                      ),
-                                      TextFieldWidget(
-                                        controller: userNameController,
-                                        hintText: 'Username',
-                                      ),
-                                      TextFieldWidget(
-                                        controller: bioController,
-                                        hintText: 'Bio',
-                                      ),
-                                      const Text('Add link'),
-                                      TextButton(
-                                          onPressed: () {},
-                                          child: const Text(
-                                              'Switch to professional account ',
-                                              style: TextStyle(
-                                                  color: Colors.blue))),
-                                      TextButton(
-                                          onPressed: () {},
-                                          child: const Text(
-                                            'Personal information settings',
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          )),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        child: const Text('Edit Profile'),
+                            child: const Text('Edit Profile'),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white),
+                            onPressed: () {},
+                            child: const Text('Share profile'),
+                          ),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white),
+                              onPressed: () {},
+                              child: IconButton(
+                                icon: const Icon(
+                                    Icons.keyboard_arrow_down_outlined),
+                                color: Colors.black,
+                                onPressed: () {},
+                              ))
+                        ],
                       ),
                     ],
                   ),

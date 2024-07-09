@@ -12,7 +12,7 @@ part 'media_event.dart';
 part 'media_state.dart';
 
 class MediaBloc extends Bloc<MediaEvent, MediaState> {
-  MediaBloc(this._mediaService) : super(MediaInitial()) {
+  MediaBloc(this._mediaRepository) : super(MediaInitial()) {
     on<UploadPictureFromCameraEvent>(_mapOnUploadPictureFromCameraEventToState);
     on<UploadPictureFromGalleryEvent>(
         _mapOnUploadPictureFromGalleryEventToState);
@@ -20,13 +20,13 @@ class MediaBloc extends Bloc<MediaEvent, MediaState> {
     on<UploadVideoFromGalleryEvent>(_mapOnUploadVideoFromGalleryEventToState);
   }
 
-  final MediaRepository _mediaService;
+  final MediaRepository _mediaRepository;
 
   FutureOr<void> _mapOnUploadPictureFromCameraEventToState(
       UploadPictureFromCameraEvent event, Emitter<MediaState> emit) async {
     try {
       emit(MediaLoading());
-      final fileImage = await _mediaService.uploadImageFromCamera();
+      final fileImage = await _mediaRepository.uploadImageFromCamera();
       emit(PhotoLoaded(fileImage: fileImage));
     } catch (e) {
       emit(MediaFailed(error: e.toString()));
@@ -37,7 +37,7 @@ class MediaBloc extends Bloc<MediaEvent, MediaState> {
       UploadPictureFromGalleryEvent event, Emitter<MediaState> emit) async {
     try {
       emit(MediaLoading());
-      final fileImage = await _mediaService.uploadPicture();
+      final fileImage = await _mediaRepository.uploadPicture();
       emit(PhotoLoaded(fileImage: fileImage));
     } catch (e) {
       emit(MediaFailed(error: e.toString()));
@@ -51,7 +51,7 @@ class MediaBloc extends Bloc<MediaEvent, MediaState> {
       UploadVideoFromGalleryEvent event, Emitter<MediaState> emit) async {
     try {
       emit(MediaLoading());
-      final file = await _mediaService.uploadVideo();
+      final file = await _mediaRepository.uploadVideo();
       emit(VideoLoaded(file: file));
     } catch (e) {
       emit(MediaFailed(error: e.toString()));

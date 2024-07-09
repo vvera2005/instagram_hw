@@ -5,8 +5,6 @@ import 'package:image_picker/image_picker.dart';
 
 import 'media_service.dart';
 
-
-
 class MediaServiceImp implements MediaService {
   ImagePicker get picker => ImagePicker();
 

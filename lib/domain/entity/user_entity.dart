@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import '../../data/models/user_model.dart';
 
 class UserEntity {
@@ -31,13 +33,20 @@ class UserEntity {
         username: username,
         name: name,
       );
-
+  @JsonKey(includeIfNull: false)
   final String? email;
+  @JsonKey(includeIfNull: false)
   final String? uid;
+  @JsonKey(includeIfNull: false)
   final String? username;
+  @JsonKey(includeIfNull: false)
   final String? name;
+  @JsonKey(includeIfNull: false)
   final String? bio;
+  @JsonKey(includeIfNull: false)
   final String? profilePicture;
+  @JsonKey(includeIfNull: false)
   final List<String>? followerList;
+  @JsonKey(includeIfNull: false)
   final List<String>? followingList;
 }
