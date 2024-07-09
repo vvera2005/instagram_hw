@@ -1,0 +1,34 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../logic/theme/theme_cubit.dart';
+
+class Settings extends StatelessWidget {
+  const Settings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+      child: Row(
+        children: [
+          SizedBox(
+            height: 150,
+          ),
+          IconButton(
+              onPressed: () {
+                context.read<ThemeModeCubit>().updateTheme(
+                    isDarkMode(context) ? ThemeMode.light : ThemeMode.dark);
+              },
+              icon: Icon(
+                  isDarkMode(context) ? Icons.light_mode : Icons.dark_mode)),
+        ],
+      ),
+    ));
+  }
+
+  bool isDarkMode(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark;
+  }
+}
