@@ -13,9 +13,13 @@ final class UpdateUserDataEvent extends UserEvent {
   final UserEntity userEntity;
 }
 
-final class GetUserDataEvent extends UserEvent {
-  const GetUserDataEvent({required this.uid});
+final class GetUserDataByIDEvent extends UserEvent {
+  const GetUserDataByIDEvent({required this.uid});
   final String uid;
+}
+
+final class GetUsersEvent extends UserEvent {
+  const GetUsersEvent();
 }
 
 class UploadProfilePhotoEvent extends UserEvent {

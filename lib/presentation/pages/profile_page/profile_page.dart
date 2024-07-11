@@ -17,14 +17,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final TextEditingController nameController = TextEditingController();
-
-  final TextEditingController userNameController = TextEditingController();
-
-  final TextEditingController bioController = TextEditingController();
   @override
   void initState() {
     super.initState();
+    if (mounted) {
+      final uid =
+          context.read<AuthBloc>().state.userCredential?.user?.uid ?? '';
+      context.read<UserBloc>().add(GetUserDataByIDEvent(uid: uid));
+    }
   }
 
   @override
@@ -39,16 +39,22 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, mediastate) {
         return BlocBuilder<UserBloc, UserState>(
           builder: (usercontext, userstate) {
+            final nameController =
+                TextEditingController(text: userstate.userEntity?.name);
+
+            final userNameController =
+                TextEditingController(text: userstate.userEntity?.username);
+
+            final bioController =
+                TextEditingController(text: userstate.userEntity?.bio);
             return BlocBuilder<AuthBloc, AuthState>(
               builder: (context, authstate) {
                 return Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
-                    title:
-                        Text(userstate.userEntity?.username ?? 'undefined'),
+                    title: Text(userstate.userEntity?.username ?? 'undefined'),
                     actions: [
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.add)),
+                      IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
                       IconButton(
                           onPressed: () {}, icon: const Icon(Icons.menu)),
                     ],
@@ -59,21 +65,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 50,
-                            backgroundColor: Colors.white,
+                            backgroundColor: userstate.userEntity != null
+                                ? null
+                                : Colors.white,
+                            backgroundImage: userstate.userEntity != null
+                                ? NetworkImage(
+                                    userstate.userEntity!.profilePicture ?? '')
+                                : null,
                           ),
-                          const IntOnStringWidget(
-                              integer: 6, mstr: 'posts'),
+                          const IntOnStringWidget(integer: 6, mstr: 'posts'),
                           IntOnStringWidget(
-                              integer: userstate
-                                      .userEntity?.followerList?.length ??
-                                  0,
+                              integer:
+                                  userstate.userEntity?.followerList?.length ??
+                                      0,
                               mstr: 'Followers'),
                           IntOnStringWidget(
-                              integer: userstate
-                                      .userEntity?.followingList?.length ??
-                                  0,
+                              integer:
+                                  userstate.userEntity?.followingList?.length ??
+                                      0,
                               mstr: 'Followwing'),
                         ],
                       ),
@@ -98,15 +109,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 builder: (context) {
                                   return SizedBox(
                                     height:
-                                        MediaQuery.of(context).size.height -
-                                            50,
+                                        MediaQuery.of(context).size.height - 50,
                                     child: SingleChildScrollView(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           AppBar(
-                                            title:
-                                                const Text('Edit profile'),
+                                            title: const Text('Edit profile'),
                                             leading: IconButton(
                                               icon: const Icon(Icons.close),
                                               onPressed: () {
@@ -116,19 +125,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                             actions: [
                                               IconButton(
                                                   onPressed: () {
-                                                    final media = context
-                                                        .read<MediaBloc>()
-                                                        .state
-                                                        .fileImage;
-                                                    context.read<UserBloc>().add(
-                                                        UploadProfilePhotoEvent(
-                                                            uid: authstate
-                                                                    .userCredential
-                                                                    ?.user
-                                                                    ?.uid ??
-                                                                '',
-                                                            file: media!
-                                                                .file));
                                                     context
                                                         .read<UserBloc>()
                                                         .add(
@@ -138,9 +134,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           username:
                                                               userNameController
                                                                   .text,
-                                                          name:
-                                                              nameController
-                                                                  .text,
+                                                          name: nameController
+                                                              .text,
                                                           bio: bioController
                                                               .text,
                                                           uid: authstate
@@ -157,10 +152,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   icon: const Icon(
                                                     Icons.done,
                                                     color: Colors.blue,
-                                                  ))
+                                                  )),
                                             ],
                                           ),
-                                          const CircleAvatar(
+                                          CircleAvatar(
+                                            backgroundColor:
+                                                userstate.userEntity != null
+                                                    ? null
+                                                    : Colors.white,
+                                            backgroundImage:
+                                                userstate.userEntity != null
+                                                    ? NetworkImage(userstate
+                                                            .userEntity!
+                                                            .profilePicture ??
+                                                        '')
+                                                    : null,
                                             radius: 50,
                                           ),
                                           SizedBox(
@@ -169,18 +175,40 @@ class _ProfilePageState extends State<ProfilePage> {
                                           TextButton(
                                               onPressed: () {
                                                 showModalBottomSheet(
-                                                  backgroundColor:
-                                                      Colors.white,
+                                                  backgroundColor: Colors.white,
                                                   context: context,
                                                   builder: (context) {
                                                     return SizedBox(
-                                                      height: 100,
-                                                      width: MediaQuery.of(
-                                                              context)
-                                                          .size
-                                                          .width,
-                                                      child:
-                                                          Column(children: [
+                                                      height: 200,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      child: Column(children: [
+                                                        ElevatedButton(
+                                                            onPressed: () {
+                                                              final media = context
+                                                                  .read<
+                                                                      MediaBloc>()
+                                                                  .state
+                                                                  .fileImage;
+                                                              context.read<UserBloc>().add(UploadProfilePhotoEvent(
+                                                                  uid: authstate
+                                                                          .userCredential
+                                                                          ?.user
+                                                                          ?.uid ??
+                                                                      '',
+                                                                  file: media!
+                                                                      .file));
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                              'Save',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            )),
                                                         ElevatedButton(
                                                             onPressed: () {
                                                               context
@@ -189,8 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   .add(
                                                                       UploadPictureFromGalleryEvent());
                                                             },
-                                                            child:
-                                                                const Text(
+                                                            child: const Text(
                                                               'Upload from Gallery',
                                                               style: TextStyle(
                                                                   color: Colors

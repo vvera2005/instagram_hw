@@ -1,30 +1,36 @@
 part of 'user_bloc.dart';
 
 sealed class UserState extends Equatable {
-  const UserState({ this.userEntity, this.error});
+  const UserState({this.userEntity, this.error, this.usersList});
   final String? error;
   final UserEntity? userEntity;
-  
+  final List<UserEntity>? usersList;
   @override
-  List<Object?> get props => [userEntity, error];
+  List<Object?> get props => [userEntity, error, userEntity];
 }
 
 final class UserInitial extends UserState {}
 
 final class UserDataUpdated extends UserState {
-  const UserDataUpdated(UserEntity? userEntity) : super(userEntity: userEntity);
+   UserDataUpdated(UserState initialState,UserEntity? userEntity) : super(userEntity: userEntity, usersList: initialState.usersList);
 }
 
 final class UserDataLoading extends UserState {
   UserDataLoading(UserState initialState)
-      : super(userEntity: initialState.userEntity);
+      : super(userEntity: initialState.userEntity, usersList: initialState.usersList);
+      
 }
 
 final class UserDataFailed extends UserState {
-    UserDataFailed(UserState initialState, String error)
-      : super(userEntity: initialState.userEntity, error: error);
+  UserDataFailed(UserState initialState, String error)
+      : super(userEntity: initialState.userEntity, error: error, usersList: initialState.usersList);
 }
 
 final class UserDataLoaded extends UserState {
-  const UserDataLoaded(UserEntity? userEntity) : super(userEntity: userEntity);
+   UserDataLoaded(UserState initialState, UserEntity? userEntity) : super(userEntity: userEntity, usersList: initialState.usersList);
+}
+
+final class AllUsersDataLoaded extends UserState {
+  const AllUsersDataLoaded(List<UserEntity>? usersList)
+      : super(usersList: usersList);
 }

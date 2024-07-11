@@ -19,11 +19,24 @@ class UserServiceImp implements UserService {
   }
 
   @override
-  Future<UserModel> getUserFromDb(String uid) async {
+  Future<UserModel> getUserByIdFromDb(String uid) async {
     final snapshot = await firebaseFirestore.collection('users').doc(uid).get();
     final userData = UserModel.fromJson(snapshot.data() ?? {});
 
     return userData;
+  }
+
+  @override
+  Stream<List<UserModel>> getUsersFromDB() async* {
+    final snapshot = firebaseFirestore.collection('users').snapshots();
+
+    await for (final mysnapshot in snapshot) {
+      final users =
+          mysnapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+      yield users;
+    }
+    // ignore: only_throw_errors
+    throw 'no data';
   }
 
   @override

@@ -10,7 +10,7 @@ class ChatServiceImp implements ChatSevice {
   final FirebaseFirestore _firebaseFirestore;
 
   Stream<List<Map<String, dynamic>>> getUsersStream() {
-    return _firebaseFirestore.collection('Users').snapshots().map(
+    return _firebaseFirestore.collection('users').snapshots().map(
       (snapshot) {
         return snapshot.docs.map(
           (doc) {

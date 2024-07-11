@@ -35,13 +35,13 @@ void main() async {
       storageBucket: 'gs://instagram-1dda6.appspot.com',
     ),
   );
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  static FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+   MyApp({super.key});
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(

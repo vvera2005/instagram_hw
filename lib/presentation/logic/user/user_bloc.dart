@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../../../data/models/user_model.dart';
 import '../../../domain/entity/user_entity.dart';
 import '../../../domain/repositories/user/user_repsitory.dart';
 part 'user_event.dart';
@@ -10,8 +11,9 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(this.userRepsitory) : super(UserInitial()) {
     on<UpdateUserDataEvent>(_mapUpdateUserDataEventToState);
-    on<GetUserDataEvent>(_mapGetUserDataEventToState);
+    on<GetUserDataByIDEvent>(_mapGetUserDataEventToState);
     on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
+    on<GetUsersEvent>(_mapGetUsersEventToState);
   }
   final UserRepsitory userRepsitory;
 
@@ -20,18 +22,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserDataLoading(state));
       userRepsitory.saveUserToDb(event.userEntity);
-      emit(UserDataUpdated(event.userEntity));
+      emit(UserDataUpdated(state, event.userEntity));
     } catch (e) {
       emit(UserDataFailed(state, e.toString()));
     }
   }
 
   FutureOr<void> _mapGetUserDataEventToState(
-      GetUserDataEvent event, Emitter<UserState> emit) async {
+      GetUserDataByIDEvent event, Emitter<UserState> emit) async {
     try {
       emit(UserDataLoading(state));
       final userEntity = await userRepsitory.getUserFromDb(event.uid);
-      emit(UserDataUpdated(userEntity));
+      emit(UserDataUpdated(state, userEntity));
     } catch (e) {
       emit(UserDataFailed(state, e.toString()));
     }
@@ -42,9 +44,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserDataLoading(state));
       userRepsitory.uploadProfilePicture(event.uid, event.file);
-      emit(UserDataLoaded(state.userEntity));
+      emit(UserDataLoaded(state, state.userEntity));
     } catch (e) {
       emit(UserDataFailed(state, e.toString()));
+    }
+  }
+
+  FutureOr<void> _mapGetUsersEventToState(
+      GetUsersEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserDataLoading(state));
+
+      await for (final List<UserEntity> users
+          in userRepsitory.getUsersFromDB()) {
+        emit(AllUsersDataLoaded(users));
+      }
+    } catch (error) {
+      emit(UserDataFailed(state, error.toString()));
     }
   }
 }
