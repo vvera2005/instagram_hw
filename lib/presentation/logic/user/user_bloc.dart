@@ -57,7 +57,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       await for (final List<UserEntity> users
           in userRepsitory.getUsersFromDB()) {
-        emit(AllUsersDataLoaded(users));
+        emit(AllUsersDataLoaded(state, users));
       }
     } catch (error) {
       emit(UserDataFailed(state, error.toString()));

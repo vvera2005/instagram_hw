@@ -16,10 +16,10 @@ final class MediaFailed extends MediaState {
   const MediaFailed({
     required this.error,
   });
-  final String error;
+  final String? error;
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 }
 
 final class PhotoLoaded extends MediaState {

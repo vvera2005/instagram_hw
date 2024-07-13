@@ -31,6 +31,6 @@ final class UserDataLoaded extends UserState {
 }
 
 final class AllUsersDataLoaded extends UserState {
-  const AllUsersDataLoaded(List<UserEntity>? usersList)
-      : super(usersList: usersList);
+   AllUsersDataLoaded(UserState initialState,List<UserEntity>? usersList)
+      : super(usersList: usersList, userEntity: initialState.userEntity);
 }

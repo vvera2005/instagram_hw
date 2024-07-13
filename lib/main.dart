@@ -8,18 +8,23 @@ import 'core/app_theme/app_theme_imp.dart';
 import 'core/routes/routes.dart';
 import 'data/repositories/auth/auth_repository_imp.dart';
 import 'data/repositories/media/media_repository_imp.dart';
+import 'data/repositories/post/post_repository_imp.dart';
 import 'data/repositories/user/user_repsitory_imp.dart';
 import 'data/services/auth/auth_service.dart';
 import 'data/services/auth/auth_service_imp.dart';
 import 'data/services/media/media_service.dart';
 import 'data/services/media/media_service_imp.dart';
+import 'data/services/post/post_service.dart';
+import 'data/services/post/post_service_imp.dart';
 import 'data/services/user/user_service.dart';
 import 'data/services/user/user_service_imp.dart';
 import 'domain/repositories/auth/auth_repository.dart';
 import 'domain/repositories/media/media_repository.dart';
+import 'domain/repositories/post/post_repository.dart';
 import 'domain/repositories/user/user_repsitory.dart';
 import 'presentation/logic/auth/auth_bloc.dart';
 import 'presentation/logic/media/media_bloc.dart';
+import 'presentation/logic/post/post_bloc.dart';
 import 'presentation/logic/theme/theme_cubit.dart';
 import 'presentation/logic/user/user_bloc.dart';
 import 'presentation/pages/googlelogin/google_login.dart';
@@ -48,11 +53,16 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthService>(
             create: (context) => AuthServiceImp(firestore)),
+        RepositoryProvider<PostService>(
+            create: (context) => PostServiceImp(firebaseFirestore: firestore, firebaseStorage: firebaseStorage)),
         RepositoryProvider<MediaService>(
             create: (context) => MediaServiceImp()),
         RepositoryProvider<AuthRepository>(
             create: (context) =>
                 AuthRepositoryImp(RepositoryProvider.of<AuthService>(context))),
+        RepositoryProvider<PostRepository>(
+            create: (context) =>
+                PostRepositoryImp(RepositoryProvider.of<PostService>(context))),
         RepositoryProvider<UserService>(
             create: (context) => UserServiceImp(firestore, firebaseStorage)),
         RepositoryProvider<UserRepsitory>(
@@ -78,6 +88,10 @@ class MyApp extends StatelessWidget {
           BlocProvider<UserBloc>(
             create: (context) =>
                 UserBloc(RepositoryProvider.of<UserRepsitory>(context)),
+          ),
+          BlocProvider<PostBloc>(
+            create: (context) =>
+                PostBloc(RepositoryProvider.of<PostRepository>(context)),
           ),
         ],
         child: BlocBuilder<ThemeModeCubit, ThemeModeState>(

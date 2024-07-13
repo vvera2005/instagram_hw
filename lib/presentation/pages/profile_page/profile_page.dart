@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
       listener: (context, mediastate) {
         if (mediastate is MediaFailed) {
           ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(mediastate.error)));
+              .showSnackBar(SnackBar(content: Text(mediastate.error ?? '')));
         }
       },
       builder: (context, mediastate) {

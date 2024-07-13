@@ -7,6 +7,7 @@ import 'auth_service.dart';
 class AuthServiceImp implements AuthService {
   AuthServiceImp(this._firestore);
   final FirebaseFirestore _firestore;
+
   @override
   Future<UserCredential> signInWithGoogle() async {
     final gUser = await GoogleSignIn().signIn();
@@ -17,12 +18,19 @@ class AuthServiceImp implements AuthService {
     );
     final userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    if (userCredential.user != null && !userCredential.user!.emailVerified ) {
-      _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'uid': userCredential.user!.uid,
-        'email': userCredential.user!.email,
-      });
+
+    if (userCredential.user != null) {
+      final userDoc = _firestore.collection('users').doc(userCredential.user!.uid);
+      final docSnapshot = await userDoc.get();
+
+      if (!docSnapshot.exists) {
+        userDoc.set({
+          'uid': userCredential.user!.uid,
+          'email': userCredential.user!.email,
+        });
+      }
     }
+
     return userCredential;
   }
 }
