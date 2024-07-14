@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
 class PostWidget extends StatelessWidget {
-  const PostWidget({super.key, required this.username, this.description});
+  const PostWidget(
+      {super.key,
+      required this.username,
+      this.description,
+      this.porfilePhoto,
+      this.postPhoto});
   final String username;
   final String? description;
+  final String? porfilePhoto;
+  final String? postPhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +18,13 @@ class PostWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 15,
               backgroundColor: Colors.pink,
+              backgroundImage:
+                  porfilePhoto != null ? NetworkImage(porfilePhoto!) : null,
             ),
-            SizedBox(
+            const SizedBox(
               width: 12,
             ),
             Text(username),
@@ -28,6 +37,7 @@ class PostWidget extends StatelessWidget {
           width: 400,
           height: 400,
           color: Colors.pink,
+          child: postPhoto != null ? Image.network(postPhoto!) : null,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,7 +57,7 @@ class PostWidget extends StatelessWidget {
         const SizedBox(
           height: 12,
         ),
-        Text(description ?? "No description"),
+        Text(description ?? 'No description'),
       ],
     );
   }

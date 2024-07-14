@@ -32,9 +32,7 @@ final class GetPostByIdFromDbEvent extends PostEvent {
 }
 
 final class GetAllPostsFromDbEvent extends PostEvent {
-  const GetAllPostsFromDbEvent({required this.postId});
-
-  final String postId;
+  const GetAllPostsFromDbEvent();
 }
 
 final class UploadPostPhotoEvent extends PostEvent {
