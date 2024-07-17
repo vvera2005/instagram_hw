@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../data/models/user_model.dart';
 import '../../../domain/entity/user_entity.dart';
 import '../../../domain/repositories/user/user_repsitory.dart';
 part 'user_event.dart';
@@ -12,6 +11,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(this.userRepsitory) : super(UserInitial()) {
     on<UpdateUserDataEvent>(_mapUpdateUserDataEventToState);
     on<GetUserDataByIDEvent>(_mapGetUserDataEventToState);
+    on<GetOtherUserDataByIDEvent>(_mapGetOtherUserDataByIdEventToState);
     on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
     on<GetUsersEvent>(_mapGetUsersEventToState);
   }
@@ -63,4 +63,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserDataFailed(state, error.toString()));
     }
   }
+
+  FutureOr<void> _mapGetOtherUserDataByIdEventToState(
+      GetOtherUserDataByIDEvent event, Emitter<UserState> emit) async{
+        try {
+      emit(UserDataLoading(state));
+      final userEntity = await userRepsitory.getUserFromDb(event.uid);
+      emit(OtherUserDataLoaded(state, userEntity));
+    } catch (e) {
+      emit(UserDataFailed(state, e.toString()));
+    }
+      }
 }

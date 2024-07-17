@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PostWidget extends StatelessWidget {
@@ -6,11 +7,13 @@ class PostWidget extends StatelessWidget {
       required this.username,
       this.description,
       this.porfilePhoto,
-      this.postPhoto});
+      this.postPhoto,
+      this.onPressed});
   final String username;
   final String? description;
   final String? porfilePhoto;
   final String? postPhoto;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +24,20 @@ class PostWidget extends StatelessWidget {
             CircleAvatar(
               radius: 15,
               backgroundColor: Colors.pink,
-              backgroundImage:
-                  porfilePhoto != null ? NetworkImage(porfilePhoto!) : null,
+              backgroundImage: porfilePhoto != null
+                  ? CachedNetworkImageProvider(porfilePhoto!)
+                  : null,
             ),
             const SizedBox(
               width: 12,
             ),
-            Text(username),
+            TextButton(
+              onPressed: onPressed,
+              child: Text(
+                username,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
         const SizedBox(
@@ -37,7 +47,9 @@ class PostWidget extends StatelessWidget {
           width: 400,
           height: 400,
           color: Colors.pink,
-          child: postPhoto != null ? Image.network(postPhoto!) : null,
+          child: postPhoto != null
+              ? CachedNetworkImage(imageUrl: postPhoto!)
+              : null,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

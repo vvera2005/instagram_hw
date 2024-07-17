@@ -18,6 +18,11 @@ final class GetUserDataByIDEvent extends UserEvent {
   final String uid;
 }
 
+final class GetOtherUserDataByIDEvent extends UserEvent {
+  const GetOtherUserDataByIDEvent({required this.uid});
+  final String uid;
+}
+
 final class GetUsersEvent extends UserEvent {
   const GetUsersEvent();
 }

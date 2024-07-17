@@ -42,7 +42,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
               ),
               onPressed: () {
                 context.read<AuthBloc>().add(LoginGoogleEvent());
-                Navigator.of(context).pushNamed('/homepage');
+                Navigator.of(context).pushReplacementNamed('/homepage');
               },
             ),
           ),

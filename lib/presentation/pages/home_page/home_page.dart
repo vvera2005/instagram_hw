@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/post/post_bloc.dart';
 import '../../logic/user/user_bloc.dart';
-import '../../widgets/media_dropdown_menu_widget.dart';
 import '../../widgets/post_widget.dart';
 import '../../widgets/story_widget.dart';
 import 'widgets/icon_in_left_side_of_text_widget.dart';
@@ -34,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       },
       builder: (context, userstate) {
         if (userstate is UserDataLoading) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
         return Scaffold(
             appBar: AppBar(
@@ -117,22 +116,30 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     return index == 0
                         ? SizedBox(
-                            height: 100,
+                            height: 110,
                             child: userstate is UserDataLoading
                                 ? const Center(
                                     child: CircularProgressIndicator())
-                                : ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: userstate.usersList?.length ?? 0,
-                                    itemBuilder: (context, index) {
-                                      return StoryWidget(
-                                        username: userstate
-                                                .usersList?[index].username ??
-                                            'no name',
-                                        profilePicture: userstate
-                                            .usersList?[index].profilePicture,
-                                      );
-                                    },
+                                : Column(
+                                    children: [
+                                      ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            userstate.usersList?.length ?? 0,
+                                        itemBuilder: (context, index) {
+                                          return StoryWidget(
+                                            username: userstate
+                                                    .usersList?[index]
+                                                    .username ??
+                                                'no name',
+                                            profilePicture: userstate
+                                                .usersList?[index]
+                                                .profilePicture,
+                                          );
+                                        },
+                                      ),
+                                      
+                                    ],
                                   ),
                           )
                         : poststate is PostDataLoading &&
@@ -156,6 +163,12 @@ class _HomePageState extends State<HomePage> {
                                     poststate.postsList?[index - 1].postPicture,
                                 description:
                                     poststate.postsList?[index - 1].description,
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                      '/users_profile_page',
+                                      arguments:
+                                          poststate.postsList?[index - 1].uid);
+                                },
                               );
                   },
                 );

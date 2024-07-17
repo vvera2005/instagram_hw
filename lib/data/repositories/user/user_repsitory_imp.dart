@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../../domain/entity/user_entity.dart';
 import '../../../domain/repositories/user/user_repsitory.dart';
 import '../../models/user_model.dart';

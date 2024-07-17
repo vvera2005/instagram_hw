@@ -13,7 +13,7 @@ class TextFormField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText ?? false,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         hintText: title,
       ),
     );

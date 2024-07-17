@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../entity/user_entity.dart';
 
 abstract class UserRepsitory {

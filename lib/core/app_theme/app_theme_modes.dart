@@ -6,7 +6,7 @@ import 'app_theme.dart';
 
 class DarkModeTheme extends AppTheme {
   @override
-  Color get primaryColor => Color.fromARGB(255, 0, 0, 0);
+  Color get primaryColor => const Color.fromARGB(255, 0, 0, 0);
 
   @override
   Color get error => Colors.redAccent;
@@ -24,7 +24,7 @@ class DarkModeTheme extends AppTheme {
   Color get onSurface => Colors.white;
 
   @override
-  Color get secondary => Color.fromARGB(255, 255, 255, 255);
+  Color get secondary => const Color.fromARGB(255, 255, 255, 255);
 
   @override
   Color get surface => Colors.black;
@@ -45,7 +45,7 @@ class DarkModeTheme extends AppTheme {
 
 class LightModeTheme extends AppTheme {
   @override
-  Color get primaryColor => Color.fromARGB(255, 0, 0, 0);
+  Color get primaryColor => const Color.fromARGB(255, 0, 0, 0);
 
   @override
   Color get error => Colors.redAccent;
@@ -63,7 +63,7 @@ class LightModeTheme extends AppTheme {
   Color get onSurface => Colors.white;
 
   @override
-  Color get secondary => Color.fromARGB(255, 0, 0, 0);
+  Color get secondary => const Color.fromARGB(255, 0, 0, 0);
 
   @override
   Color get surface => Colors.black;

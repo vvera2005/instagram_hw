@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../models/user_model.dart';
 import 'chat_sevice.dart';
 
 class ChatServiceImp implements ChatSevice {
@@ -9,12 +10,12 @@ class ChatServiceImp implements ChatSevice {
 
   final FirebaseFirestore _firebaseFirestore;
 
-  Stream<List<Map<String, dynamic>>> getUsersStream() {
+  Stream<List<UserModel>> getUsersStream() {
     return _firebaseFirestore.collection('users').snapshots().map(
       (snapshot) {
         return snapshot.docs.map(
           (doc) {
-            final user = doc.data();
+            final user = UserModel.fromJson(doc.data());
             return user;
           },
         ).toList();

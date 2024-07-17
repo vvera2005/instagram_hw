@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../logic/theme/theme_cubit.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({super.key});
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class Settings extends StatelessWidget {
         body: Center(
       child: Row(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 150,
           ),
           IconButton(

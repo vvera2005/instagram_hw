@@ -7,7 +7,6 @@ import '../../constants/gaps.dart';
 import '../../logic/auth/auth_bloc.dart';
 import '../../logic/media/media_bloc.dart';
 import '../../logic/post/post_bloc.dart';
-import '../../logic/user/user_bloc.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
