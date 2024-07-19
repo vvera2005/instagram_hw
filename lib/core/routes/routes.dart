@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../presentation/pages/chat/chat_home_page.dart';
+import '../../presentation/pages/chat/chat_page.dart';
 import '../../presentation/pages/create_post/create_post_page.dart';
 import '../../presentation/pages/home_page/home_page.dart';
 import '../../presentation/pages/profile_page/profile_page.dart';
@@ -18,9 +20,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProfilePage());
       case '/add_post':
         return MaterialPageRoute(builder: (_) => const CreatePostPage());
+      case '/chat_home_page':
+        return MaterialPageRoute(builder: (_) => const ChatHomePage());
       case '/users_profile_page':
-    
-        return MaterialPageRoute(builder: (_) =>  UsersProfilePage(uid:settings.arguments.toString() ,));
+        return MaterialPageRoute(
+            builder: (_) =>
+                UsersProfilePage(uid: settings.arguments.toString()));
+      case '/chat_page':
+        return MaterialPageRoute(
+            builder: (_) => ChatPage(uid: settings.arguments.toString()));
       default:
         throw Exception('No page found');
     }

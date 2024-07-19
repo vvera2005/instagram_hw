@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme/app_theme_imp.dart';
 import 'core/routes/routes.dart';
 import 'data/repositories/auth/auth_repository_imp.dart';
+import 'data/repositories/chat/chat_repository_imp.dart';
 import 'data/repositories/media/media_repository_imp.dart';
 import 'data/repositories/post/post_repository_imp.dart';
 import 'data/repositories/user/user_repsitory_imp.dart';
 import 'data/services/auth/auth_service.dart';
 import 'data/services/auth/auth_service_imp.dart';
+import 'data/services/chat/chat_service_imp.dart';
+import 'data/services/chat/chat_sevice.dart';
 import 'data/services/media/media_service.dart';
 import 'data/services/media/media_service_imp.dart';
 import 'data/services/post/post_service.dart';
@@ -19,10 +23,12 @@ import 'data/services/post/post_service_imp.dart';
 import 'data/services/user/user_service.dart';
 import 'data/services/user/user_service_imp.dart';
 import 'domain/repositories/auth/auth_repository.dart';
+import 'domain/repositories/chat/chat_repository.dart';
 import 'domain/repositories/media/media_repository.dart';
 import 'domain/repositories/post/post_repository.dart';
 import 'domain/repositories/user/user_repsitory.dart';
 import 'presentation/logic/auth/auth_bloc.dart';
+import 'presentation/logic/chat/chat_bloc.dart';
 import 'presentation/logic/media/media_bloc.dart';
 import 'presentation/logic/post/post_bloc.dart';
 import 'presentation/logic/theme/theme_cubit.dart';
@@ -38,23 +44,33 @@ void main() async {
       messagingSenderId: '',
       projectId: 'instagram-1dda6',
       storageBucket: 'gs://instagram-1dda6.appspot.com',
+      databaseURL: 'https://instagram-1dda6-default-rtdb.firebaseio.com/'
     ),
   );
-  runApp( MyApp());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+  MyApp({super.key});
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthService>(
             create: (context) => AuthServiceImp(firestore)),
+        RepositoryProvider<ChatService>(
+            create: (context) => ChatServiceImp(firestore, firebaseDatabase)),
+        RepositoryProvider<ChatRepository>(
+            create: (context) =>
+                ChatRepositoryImp(RepositoryProvider.of<ChatService>(context))),
         RepositoryProvider<PostService>(
-            create: (context) => PostServiceImp(firebaseFirestore: firestore, firebaseStorage: firebaseStorage)),
+            create: (context) => PostServiceImp(
+                firebaseFirestore: firestore,
+                firebaseStorage: firebaseStorage)),
         RepositoryProvider<MediaService>(
             create: (context) => MediaServiceImp()),
         RepositoryProvider<AuthRepository>(
@@ -92,6 +108,10 @@ class MyApp extends StatelessWidget {
           BlocProvider<PostBloc>(
             create: (context) =>
                 PostBloc(RepositoryProvider.of<PostRepository>(context)),
+          ),
+          BlocProvider<ChatBloc>(
+            create: (context) =>
+                ChatBloc(RepositoryProvider.of<ChatRepository>(context)),
           ),
         ],
         child: BlocBuilder<ThemeModeCubit, ThemeModeState>(

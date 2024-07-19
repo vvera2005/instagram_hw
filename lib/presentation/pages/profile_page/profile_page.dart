@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    if (mounted) {
+    if (mounted && context.read<UserBloc>().state.userEntity == null) {
       final uid =
           context.read<AuthBloc>().state.userCredential?.user?.uid ?? '';
       context.read<UserBloc>().add(GetUserDataByIDEvent(uid: uid));
@@ -160,13 +161,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 userstate.userEntity != null
                                                     ? null
                                                     : Colors.white,
-                                            backgroundImage:
-                                                userstate.userEntity != null
-                                                    ? NetworkImage(userstate
-                                                            .userEntity!
-                                                            .profilePicture ??
-                                                        '')
-                                                    : null,
+                                            backgroundImage: userstate
+                                                        .userEntity
+                                                        ?.profilePicture !=
+                                                    null
+                                                ? CachedNetworkImageProvider(
+                                                    userstate.userEntity!
+                                                        .profilePicture!)
+                                                : null,
                                             radius: 50,
                                           ),
                                           SizedBox(
