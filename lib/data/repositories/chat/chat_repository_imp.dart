@@ -24,7 +24,7 @@ class ChatRepositoryImp implements ChatRepository {
         in _chatService.getMessages(chatId)) {
       yield data
           .map(
-            (e) => ChatMessage.fromJson(e),
+            (e) => ChatMessage.fromJson(e as Map<String, dynamic>),
           )
           .toList();
     }

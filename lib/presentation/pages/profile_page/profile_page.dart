@@ -176,20 +176,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       )),
                                                 ],
                                               ),
-                                              CircleAvatar(
-                                                backgroundColor:
-                                                    userstate.userEntity != null
-                                                        ? null
-                                                        : Colors.white,
-                                                backgroundImage: userstate
-                                                            .userEntity
-                                                            ?.profilePicture !=
-                                                        null
-                                                    ? CachedNetworkImageProvider(
-                                                        userstate.userEntity!
-                                                            .profilePicture!)
-                                                    : null,
-                                                radius: 50,
+                                              BlocConsumer<MediaBloc,
+                                                  MediaState>(
+                                                listener: (context, state) {
+                                                  // TODO: implement listener
+                                                },
+                                                builder: (context, mediaState) {
+                                                  return CircleAvatar(
+                                                    backgroundColor:
+                                                        userstate.userEntity !=
+                                                                null
+                                                            ? null
+                                                            : Colors.white,
+                                                    backgroundImage:
+                                                        mediaState.fileImage ?? (userstate.userEntity?.profilePicture != null ?  CachedNetworkImageProvider(
+                                                                      userstate
+                                                                          .userEntity!
+                                                                          .profilePicture!) :null ),
+                                                           
+                                                    radius: 50,
+                                                  );
+                                                },
                                               ),
                                               SizedBox(
                                                 height: Gaps.smallest,

@@ -20,7 +20,8 @@ class AuthServiceImp implements AuthService {
         await FirebaseAuth.instance.signInWithCredential(credential);
 
     if (userCredential.user != null) {
-      final userDoc = _firestore.collection('users').doc(userCredential.user!.uid);
+      final userDoc =
+          _firestore.collection('users').doc(userCredential.user!.uid);
       final docSnapshot = await userDoc.get();
 
       if (!docSnapshot.exists) {

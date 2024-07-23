@@ -11,6 +11,17 @@ class ChatServiceImp implements ChatService {
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseDatabase _firebaseDatabase;
 
+  MapEntry<String, dynamic> _convertObjectToMap(Object? key, Object? value) {
+    if (key == 'user') {
+      return MapEntry<String, dynamic>(
+          key.toString(),
+          (value as Map<Object?, Object?>?)?.map(
+            (key, value) => MapEntry<String, dynamic>(key.toString(), value),
+          ));
+    }
+    return MapEntry<String, dynamic>(key.toString(), value);
+  }
+
   @override
   Future<void> createNewChatroom(String uid1, String uid2) async {
     final uids = [uid1, uid2];
@@ -50,20 +61,28 @@ class ChatServiceImp implements ChatService {
   }
 
   @override
-  Stream<List<Map<String, dynamic>>> getMessages(String chatId) {
-    return _firebaseDatabase.ref('messages').child(chatId).onValue.map((event) {
+  Stream<List<Map<String, dynamic>>> getMessages(String chatId) async* {
+    await for (final event
+        in _firebaseDatabase.ref('messages').child(chatId).onValue) {
       final snapshot = event.snapshot;
       if (snapshot.value == null) {
-        return [];
+        yield [];
       }
 
-      final messagesMap = (snapshot.value! as Map).cast<String, dynamic>();
-      return messagesMap.entries.map((entry) {
-        final value = (entry.value as Map).cast<String, dynamic>();
-        return value;
-      }).toList();
-    });
+      final messagesMap = snapshot.children.toList();
+      yield messagesMap
+          .map(
+            (e) =>
+                (e.value as Map<Object?, Object?>?)
+                    ?.map((key, value) => _convertObjectToMap(key, value)) ??
+                <String, dynamic>{},
+          )
+          .toList();
+    }
   }
+}
+   
+      
 
   // @override
   // Future<List<MessageModel>> getMessages(String chatId) async {
@@ -101,7 +120,7 @@ class ChatServiceImp implements ChatService {
 
   //   });
   // }
-}
+
 
 
 //  _firebaseDatabase

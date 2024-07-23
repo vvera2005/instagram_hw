@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entity/message_entity.dart';
 import '../../../domain/repositories/chat/chat_repository.dart';
 
 part 'chat_event.dart';
