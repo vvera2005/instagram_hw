@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../data/services/chat/chat_service_imp.dart';
 import '../../constants/gaps.dart';
 import '../../logic/auth/auth_bloc.dart';
 import '../../logic/chat/chat_bloc.dart';
@@ -59,9 +56,18 @@ class _ChatHomePageState extends State<ChatHomePage> {
                         username: usersList?[index].username ?? 'nu username',
                         imgUrl: usersList?[index].profilePicture,
                         onPressed: () {
+                          final uids = [
+                            userState.userEntity?.uid,
+                            usersList?[index].uid
+                          ];
+                          uids.sort();
+                          final chatId = uids.fold('', (id, uid) => '$id$uid');
                           context.read<ChatBloc>().add(CreateChatRoomEvent(
                               uid1: userState.userEntity?.uid,
                               uid2: usersList?[index].uid));
+                          context
+                              .read<ChatBloc>()
+                              .add(GetMessagesEvent(chatId: chatId));
                           Navigator.of(context).pushNamed('/chat_page',
                               arguments: usersList?[index].uid);
                         },

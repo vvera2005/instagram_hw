@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import '../../data/models/chat_model.dart';
-import '../../data/models/post_model.dart';
 import 'message_entity.dart';
 
 class ChatEntity {

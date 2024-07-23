@@ -20,5 +20,13 @@ class SendMessageEvent extends ChatEvent {
 
   final String? uid1;
   final String? uid2;
-  final MessageEntity? mesage;
+  final ChatMessage? mesage;
+}
+
+class GetMessagesEvent extends ChatEvent {
+  const GetMessagesEvent(
+      {required this.chatId, });
+
+  final String? chatId;
+
 }

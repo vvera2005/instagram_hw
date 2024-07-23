@@ -33,3 +33,10 @@ class UploadProfilePhotoEvent extends UserEvent {
   final String uid;
   final File file;
 }
+
+class FollowEvent extends UserEvent {
+  const FollowEvent({required this.uid, required this.folloingId});
+
+  final String uid;
+  final String folloingId;
+}

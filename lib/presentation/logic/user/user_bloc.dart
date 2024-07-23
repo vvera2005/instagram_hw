@@ -14,6 +14,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetOtherUserDataByIDEvent>(_mapGetOtherUserDataByIdEventToState);
     on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
     on<GetUsersEvent>(_mapGetUsersEventToState);
+    on<FollowEvent>(_mapFollowEventToState);
   }
   final UserRepsitory userRepsitory;
 
@@ -65,13 +66,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   FutureOr<void> _mapGetOtherUserDataByIdEventToState(
-      GetOtherUserDataByIDEvent event, Emitter<UserState> emit) async{
-        try {
+      GetOtherUserDataByIDEvent event, Emitter<UserState> emit) async {
+    try {
       emit(UserDataLoading(state));
       final userEntity = await userRepsitory.getUserFromDb(event.uid);
       emit(OtherUserDataLoaded(state, userEntity));
     } catch (e) {
       emit(UserDataFailed(state, e.toString()));
     }
-      }
+  }
+
+  FutureOr<void> _mapFollowEventToState(
+      FollowEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserDataLoading(state));
+      await userRepsitory.follow(event.uid, event.folloingId);
+      emit(UserDataUpdated(state, state.userEntity));
+    } catch (e) {
+      emit(UserDataFailed(state, e.toString()));
+    }
+  }
 }

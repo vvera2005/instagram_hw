@@ -1,3 +1,4 @@
+import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../data/models/user_model.dart';
@@ -33,6 +34,14 @@ class UserEntity {
         username: username,
         name: name,
       );
+  ChatUser toChatUser() {
+    return ChatUser(
+      id: uid ?? '',
+      profileImage: profilePicture,
+      firstName: name,
+    );
+  }
+
   @JsonKey(includeIfNull: false)
   final String? email;
   @JsonKey(includeIfNull: false)

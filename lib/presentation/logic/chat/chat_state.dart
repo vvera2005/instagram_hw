@@ -5,7 +5,7 @@ sealed class ChatState extends Equatable {
     this.messages,
     this.error,
   });
-  final List<MessageEntity>? messages;
+  final List<ChatMessage>? messages;
   final String? error;
   @override
   List<Object?> get props => [messages, error];
@@ -22,7 +22,7 @@ final class ChatLoading extends ChatState {
 }
 
 final class ChatLoaded extends ChatState {
-  ChatLoaded(ChatState initialState, List<MessageEntity>? messages)
+  ChatLoaded(ChatState initialState, List<ChatMessage>? messages)
       : super(messages: messages);
 }
 
