@@ -34,7 +34,7 @@ class UserRepsitoryImp implements UserRepsitory {
   }
   
   @override
-  Future<void> follow(String uid, String followingId) {
-    return userService.follow(uid, followingId);
+  Future<void> follow(String uid, String followingId) async {
+    await userService.follow(uid, followingId);
   }
 }

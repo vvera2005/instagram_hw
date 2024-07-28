@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<PostService>(
             create: (context) => PostServiceImp(
                 firebaseFirestore: firestore,
-                firebaseStorage: firebaseStorage)),
+                firebaseStorage: firebaseStorage, firebaseDatabase: firebaseDatabase)),
         RepositoryProvider<MediaService>(
             create: (context) => MediaServiceImp()),
         RepositoryProvider<AuthRepository>(

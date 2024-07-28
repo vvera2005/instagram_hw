@@ -57,11 +57,12 @@ class UserServiceImp implements UserService {
 
   @override
   Future<void> follow(String uid, String followingId) async {
-    await firebaseFirestore.collection('users').doc(uid).update({
-      'followingList': FieldValue.arrayUnion([followingId]),
-    });
-    await firebaseFirestore.collection('users').doc(followingId).update({
-      'followerList': FieldValue.arrayUnion([uid]),
-    });
-  }
+  await firebaseFirestore.collection('users').doc(uid).update({
+    'followingList': FieldValue.arrayUnion([followingId]),
+  });
+  await firebaseFirestore.collection('users').doc(followingId).update({
+    'followerList': FieldValue.arrayUnion([uid]),
+  });
+}
+
 }

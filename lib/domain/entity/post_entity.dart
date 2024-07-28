@@ -7,6 +7,7 @@ class PostEntity {
 
   factory PostEntity.fromModel(PostModel model) => PostEntity(
         uid: model.uid,
+        postId: model.postId,
         postPicture: model.postPicture,
         description: model.description,
       );

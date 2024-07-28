@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 onPressed: () => showModalBottomSheet(
                   builder: (context) => SizedBox(
-                    height: MediaQuery.of(context).size.height,
+                    height: 400,
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,6 +144,9 @@ class _HomePageState extends State<HomePage> {
                               userstate is UserDataLoading
                           ? const Center(child: CircularProgressIndicator())
                           : PostWidget(
+                              postId: poststate.postsList?[index - 1].postId,
+                              userState: userstate,
+                              // postState: poststate,
                               username: userstate.usersList
                                       ?.where((element) =>
                                           element.uid ==

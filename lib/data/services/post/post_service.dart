@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../models/comment_model.dart';
 import '../../models/post_model.dart';
 
 abstract class PostService {
@@ -9,4 +10,6 @@ abstract class PostService {
   Future<PostModel> getPostByIdFromDb(String postid);
   Stream<List<PostModel>> getPostsFromDB();
   Future<void> uploadPostPictureToDb(String postid, File file);
+  Future<void> sendComment(String postId, CommentModel? comment);
+  Stream<List<CommentModel>> getComments(String postId);
 }

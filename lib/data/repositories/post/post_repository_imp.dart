@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../../domain/entity/comment_entity.dart';
 import '../../../domain/entity/post_entity.dart';
 import '../../../domain/repositories/post/post_repository.dart';
 import '../../models/post_model.dart';
@@ -39,5 +40,17 @@ class PostRepositoryImp implements PostRepository {
   @override
   Future<void> uploadPostPictureToDb(String postid, File file) async {
     await postService.uploadPostPictureToDb(postid, file);
+  }
+
+  @override
+  Future<void> sendComment(String postId, CommentEntity? comment) async {
+    await postService.sendComment(postId, comment?.toModel());
+  }
+
+  @override
+  Stream<List<CommentEntity>> getComments(String postId) async* {
+    await for (final comment in postService.getComments(postId)) {
+      yield comment.map((e) => CommentEntity.fromModel(e)).toList();
+    }
   }
 }

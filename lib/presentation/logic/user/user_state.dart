@@ -22,6 +22,7 @@ final class UserDataUpdated extends UserState {
       : super(
           userEntity: userEntity,
           usersList: initialState.usersList,
+          otherUserEntity: initialState.otherUserEntity
         );
 }
 

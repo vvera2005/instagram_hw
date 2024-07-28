@@ -41,3 +41,16 @@ final class UploadPostPhotoEvent extends PostEvent {
   final String postId;
   final File file;
 }
+
+final class SendCommentEvent extends PostEvent {
+  const SendCommentEvent({required this.postId, required this.comment});
+
+  final String postId;
+  final CommentEntity comment;
+}
+
+final class GetCommentEvent extends PostEvent {
+  const GetCommentEvent({required this.postId});
+
+  final String postId;
+}
